@@ -1,0 +1,35 @@
+VỊ TRÍ CODE QUAN TRỌNG – ĐỀ TÀI 3 LEAFLET
+Ctrl+F theo từ khóa (dòng thay đổi nếu bạn sửa code).
+
+Dữ liệu cửa hàng mẫu: js/app.js | dòng 24 | Ctrl+F: const stores = [
+Tâm bản đồ: js/app.js | dòng 136 | Ctrl+F: const map = new L.LeafletMap
+Chọn bản đồ nền: js/app.js | dòng 167 | Ctrl+F: function useTileProvider
+Marker cửa hàng: js/app.js | dòng 219 | Ctrl+F: function renderStores
+Lọc cửa hàng: js/app.js | dòng 281 | Ctrl+F: function filterStoreCards
+Chọn chế độ: js/app.js | dòng 344 | Ctrl+F: function setMode
+Click lấy tọa độ: js/app.js | dòng 380 | Ctrl+F: map.on("click"
+Hiển thị tọa độ: js/app.js | dòng 404 | Ctrl+F: function showCoordinate
+Thêm điểm A/B/C/D: js/app.js | dòng 415 | Ctrl+F: function handleNewPoint
+Tìm cửa hàng gần nhất: js/app.js | dòng 451 | Ctrl+F: async function startNearestStoreRoute
+Khoảng cách Haversine: js/app.js | dòng 528 | Ctrl+F: function haversineDistance
+OSRM Table API: js/app.js | dòng 545 | Ctrl+F: async function findNearestStoreByRoad
+OSRM Route API: js/app.js | dòng 616 | Ctrl+F: async function requestRoute
+Màu đường đi: js/app.js | dòng 693 | Ctrl+F: function drawRouteGeometry
+Chỉ đường A-B-C-D: js/app.js | dòng 738 | Ctrl+F: function renderDirections
+Hướng rẽ từng bước: js/app.js | dòng 762 | Ctrl+F: function instructionForStep
+Marker điểm A/B/C/D: js/app.js | dòng 818 | Ctrl+F: function rebuildWaypointMarkers
+Kiểm tra tọa độ nhập: js/app.js | dòng 912 | Ctrl+F: function parseCoordinateInput
+Tìm tên địa điểm Nominatim: js/app.js | dòng 943 | Ctrl+F: async function searchPlaceByName
+Reset tuyến: js/app.js | dòng 1092 | Ctrl+F: function clearRouteState
+Màu chủ đạo: css/style.css | dòng 11 | Ctrl+F: :root {
+Màu điểm A: css/style.css | dòng 142 | Ctrl+F: .waypoint-start {
+Màu điểm trung gian: css/style.css | dòng 143 | Ctrl+F: .waypoint-middle {
+Màu điểm cuối: css/style.css | dòng 144 | Ctrl+F: .waypoint-end {
+Màu marker cửa hàng: css/style.css | dòng 146 | Ctrl+F: .store-marker-icon {
+Kích thước bản đồ: css/style.css | dòng 97 | Ctrl+F: #map {
+
+GIẢI THÍCH NGẮN:
+Leaflet = hiển thị bản đồ; OSRM = tính tuyến; Nominatim = tìm tên địa điểm.
+Haversine = khoảng cách đường chim bay, không phải đường bộ.
+Đường đỏ nét đứt khi OSRM lỗi là đường nối dự phòng, KHÔNG phải đường giao thông.
+OSRM mặc định tối ưu theo profile routing, không bảo đảm quãng đường tuyệt đối ngắn nhất trên mọi tuyến.

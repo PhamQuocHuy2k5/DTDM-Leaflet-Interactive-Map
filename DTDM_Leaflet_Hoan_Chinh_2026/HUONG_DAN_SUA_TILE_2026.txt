@@ -1,0 +1,8 @@
+LOI BAN DO NEN - CAP NHAT 29/10/2026
+
+1. CARTO Light nay yeu cau API key. Tile co the tra HTTP 200 nhung hien API KEY REQUIRED. Da loai bo CARTO khong key.
+2. Ban do mac dinh: Esri World Topo Map. Co the thu Esri World Imagery, Esri World Street Map va OpenStreetMap trong menu Ban do nen.
+3. Mo thu muc trong VS Code, chay index.html bang Open with Live Server. Dia chi phai co dang http://127.0.0.1:5500/... khong phai file:///C:/...
+4. Neu khong co nguon ban do nao hien: kiem tra Internet, trinh duyet, proxy, mang truong va nhan Ctrl+F5. Chinh sach nha cung cap co the thay doi; khong co gi dam bao moi mang deu tai duoc tile.
+5. Viec load tile ban do doc lap voi API OSRM; can test them tuyen A-B, gan nhat va waypoint.
+
