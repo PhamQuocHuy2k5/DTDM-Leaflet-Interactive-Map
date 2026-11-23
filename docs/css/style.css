@@ -1,0 +1,258 @@
+/* ================================================================
+   GIAO DIỆN NÂNG CẤP - ĐỀ TÀI 3 LEAFLET
+   [GV HỎI] CÁC VỊ TRÍ DỄ SỬA:
+   - Màu chủ đạo toàn giao diện: :root > --primary / --header
+   - Màu A, B/C, điểm cuối: .waypoint-start / -middle / -end
+   - Màu đường đi: js/app.js > drawRouteGeometry() > color
+   - Màu marker cửa hàng: .store-marker-icon
+   - Độ cao bản đồ: #map / .map-area
+   - Các điểm cửa hàng mẫu: js/app.js > const stores
+   ================================================================ */
+:root {
+  --header: #0d4f42;
+  --header-deep: #083e35;
+  --primary: #07966b;
+  --primary-dark: #067653;
+  --primary-soft: #e9f8f1;
+  --blue: #2368dc;
+  --blue-soft: #edf3ff;
+  --danger: #d73d45;
+  --success: #238636;
+  --text: #19334a;
+  --muted: #687b8e;
+  --border: #dce6ec;
+  --surface: #fff;
+  --bg: #f2f6f8;
+  --shadow: 0 5px 22px rgba(14, 42, 54, .06);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { min-width: 320px; font: 14px/1.5 Inter, "Segoe UI", Arial, sans-serif; color: var(--text); background: var(--bg); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #73c9ae; outline-offset: 2px; }
+[hidden] { display: none !important; }
+.app-header { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:93px; padding:14px 26px; background:linear-gradient(110deg, var(--header-deep), var(--header) 55%, #116d56); color:#fff; box-shadow:0 3px 16px rgba(6,40,33,.15); }
+.brand { display:flex; align-items:center; gap:15px; min-width:0; }
+.brand-mark { flex:0 0 55px; width:55px; height:55px; display:grid; place-items:center; font-size:34px; font-weight:800; color:#fff; border:1px solid rgba(255,255,255,.24); background:rgba(255,255,255,.13); border-radius:15px; }
+.eyebrow { font-size:10px; font-weight:800; letter-spacing:.15em; color:#a6f0d0; margin:0 0 2px; }
+.app-header h1 { margin:0; font-size:clamp(18px,1.6vw,26px); line-height:1.2; font-weight:850; letter-spacing:.01em; }
+.subtitle { margin:5px 0 0; color:#d0ede3; font-size:12px; }
+.tech-badges { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:7px; }
+.tech-badges span { white-space:nowrap; border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); color:#eafcf6; border-radius:20px; padding:6px 11px; font-size:11px; font-weight:700; }
+.app-layout { display:grid; grid-template-columns:minmax(260px,305px) minmax(360px,1fr) minmax(280px,325px); gap:12px; padding:12px; height:calc(100vh - 93px); min-height:620px; }
+.sidebar { min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:12px; scrollbar-width:thin; scrollbar-color:#c2d4dc transparent; }
+.sidebar::-webkit-scrollbar, .directions::-webkit-scrollbar { width:7px; }
+.sidebar::-webkit-scrollbar-thumb, .directions::-webkit-scrollbar-thumb { background:#bdcdd6; border-radius:8px; }
+.panel, .map-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); }
+.panel { padding:14px; flex-shrink:0; }
+.panel-heading { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.panel-heading.compact { margin-bottom:9px; }
+.panel-heading h2 { margin:0; font-size:14px; font-weight:800; color:#174c43; line-height:1.3; }
+.panel-heading p { margin:2px 0 0; font-size:11px; color:var(--muted); }
+.section-icon { flex:0 0 34px; width:34px; height:34px; display:grid; place-items:center; font-size:20px; font-weight:800; border-radius:10px; background:var(--primary-soft); color:var(--primary-dark); }
+.section-icon.blue { color:var(--blue); background:var(--blue-soft); }
+.count-chip { display:inline-block; font-size:11px; padding:2px 7px; border-radius:8px; background:#eaf1ff; color:var(--blue); }
+.panel label { display:block; margin:0 0 6px; font-size:11px; font-weight:800; color:#476276; }
+.input-shell { display:flex; align-items:center; gap:7px; border:1px solid #d1dfe6; border-radius:10px; padding:0 10px; background:#fbfdfe; }
+.input-shell:focus-within { border-color:var(--primary); box-shadow:0 0 0 3px #dff6eb; }
+.input-shell span { font-size:20px; color:var(--primary); }
+.input-shell input { flex:1; min-width:0; padding:11px 0; border:0; outline:0; background:transparent; color:var(--text); font-size:12px; }
+.input-shell input::placeholder { color:#91a0ae; }
+.input-caption { color:var(--muted); font-size:10px; margin:7px 0 0; }
+.store-search-panel { background:linear-gradient(145deg,#fff,#f0fbf5); }
+.store-panel { padding-bottom:8px; }
+.store-list { display:grid; gap:0; }
+.store-card { display:grid; grid-template-columns:36px minmax(0,1fr); align-items:start; gap:10px; width:100%; padding:12px 6px; border:0; border-top:1px solid #eaf0f4; background:#fff; text-align:left; color:inherit; transition:background .15s ease; }
+.store-card:hover, .store-card.selected { background:#effaf4; }
+.store-card.selected { box-shadow:inset 3px 0 var(--primary); }
+.store-card.nearest { background:#e9f8ec; box-shadow:inset 3px 0 #2da64c; }
+.store-index { display:grid; place-items:center; width:33px; height:33px; background:#e8f6ef; color:#0c7958; border-radius:50% 50% 50% 8px; font-size:13px; font-weight:900; }
+.store-card:nth-child(2) .store-index { background:#e9f0ff; color:#2868d3; }
+.store-card:nth-child(3) .store-index { background:#f0f6e9; color:#4b941b; }
+.store-card:nth-child(4) .store-index { background:#f2eaff; color:#7846c8; }
+.store-card:nth-child(5) .store-index { background:#fff2e4; color:#d17710; }
+.store-content { min-width:0; }
+.store-content strong { display:block; margin-bottom:3px; font-size:12px; font-weight:800; color:#1b3450; }
+.store-content small { display:block; margin-top:2px; color:var(--muted); font-size:10.5px; overflow-wrap:anywhere; }
+.nearest-badge { display:none; grid-column:2; width:max-content; color:#16803b; background:#d5f5e0; border-radius:9px; font-size:10px; padding:2px 7px; }
+.store-card.nearest .nearest-badge { display:block; }
+.empty-result { padding:15px 5px; font-size:12px; color:var(--muted); }
+.store-detail-content { font-size:12px; line-height:1.7; color:#456075; }
+.store-detail-content strong { display:block; color:#153a4d; font-size:14px; margin-bottom:5px; }
+.store-detail-content .detail-coordinate { display:inline-block; margin-top:6px; background:#eff8f5; color:#16775a; border-radius:8px; padding:5px 8px; font-weight:700; font-size:11px; }
+.quick-guide { background:linear-gradient(135deg,#f7faff,#eef5ff); }
+.quick-guide ol { margin:0; padding-left:20px; color:#456075; font-size:11px; }
+.quick-guide li { margin-bottom:7px; }
+.map-card { display:flex; flex-direction:column; min-width:0; min-height:0; overflow:hidden; }
+.map-card-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 15px; min-height:83px; }
+.map-overline { margin:0 0 2px; font-size:10px !important; letter-spacing:.11em; color:var(--primary) !important; font-weight:900; }
+.map-card-header h2 { margin:0; font-size:17px; font-weight:850; }
+.map-card-header p { margin:3px 0 0; font-size:11px; color:var(--muted); }
+.map-source-label { flex:0 0 auto; display:flex; align-items:center; gap:7px; color:#506779; font-size:11px; font-weight:700; }
+.map-source-label select { max-width:175px; padding:8px; border:1px solid #d2dfe6; border-radius:9px; color:#25485b; background:#f7fafc; font-size:11px; }
+.map-area { flex:1; min-height:350px; position:relative; padding:0 9px; background:#e5f0ef; }
+/* [GV HỎI] Chỉnh kích thước bản đồ tại #map */
+#map { height:100%; width:100%; min-height:350px; border:1px solid #cbd9dc; border-radius:10px; background:#dce9e8; cursor:crosshair; }
+.map-legend { position:absolute; z-index:500; bottom:16px; left:23px; display:flex; flex-wrap:wrap; gap:5px; max-width:calc(100% - 45px); pointer-events:none; }
+.map-legend span { display:inline-flex; align-items:center; gap:5px; padding:5px 8px; background:rgba(255,255,255,.94); border:1px solid #dfe7e9; border-radius:7px; box-shadow:0 2px 9px rgba(10,40,30,.08); font-size:10px; font-weight:700; color:#435a68; }
+.map-legend i { width:9px; height:9px; display:inline-block; border-radius:50%; }
+.legend-store { background:var(--primary); } .legend-start { background:#238636; } .legend-middle { background:#0f6cbd; } .legend-end { background:#c73737; }
+.map-bottom-bar { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:11px 12px; min-height:72px; background:#fff; }
+.map-stat { display:flex; align-items:center; gap:7px; flex:1 1 105px; min-width:0; padding-right:5px; border-right:1px solid #e9eef1; }
+.stat-icon { display:grid; place-items:center; width:30px; height:30px; flex:0 0 30px; border-radius:9px; background:#ecf8f1; color:#088b62; font-size:17px; font-weight:800; }
+.map-stat:nth-child(2) .stat-icon { background:#eff4ff; color:var(--blue); }
+.map-stat small { display:block; font-size:10px; color:var(--muted); white-space:nowrap; }
+.map-stat strong { display:block; font-size:14px; color:#173f50; white-space:nowrap; }
+.btn { border:1px solid #cbdbe3; border-radius:9px; background:#fff; padding:10px 11px; color:#284558; font-weight:750; font-size:11px; transition:background .15s,transform .15s,box-shadow .15s; }
+.btn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 4px 10px rgba(12,50,55,.08); }
+.btn.primary, .btn.active { background:linear-gradient(135deg,#099f70,#06855f); border-color:#0a946a; color:#fff; }
+.btn.secondary { color:#2363b5; border-color:#cbdcf7; background:#f2f6ff; }
+.btn.danger { color:#fff; background:#d83e47; border-color:#d83e47; }
+.btn.outline-danger { color:#c52f3c; border-color:#f0cdd1; background:#fff8f8; }
+.map-clear { flex:0 0 auto; }
+.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.mode-button { display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:6px; min-width:0; padding:10px 8px; }
+.button-icon { display:grid; place-items:center; width:30px; height:30px; background:#f0f6f8; color:#187c64; border-radius:8px; font-size:19px; }
+.mode-button.active .button-icon { background:rgba(255,255,255,.18); color:#fff; }
+.mode-button strong, .mode-button small { display:block; }
+.mode-button strong { font-size:11px; line-height:1.35; }
+.mode-button small { margin-top:4px; font-size:10px; color:#718494; font-weight:500; }
+.mode-button.active small { color:#d5f8e8; }
+.help { background:#f2f9f6; border-left:3px solid #0b9a6b; border-radius:7px; color:#547369; padding:9px 10px; margin:10px 0 0; font-size:11px; }
+.button-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:9px; }
+.search-results { display:grid; gap:5px; margin-top:8px; }
+.search-results:empty { display:none; }
+.search-result { border:1px solid #dae5e9; background:#fff; border-radius:8px; text-align:left; padding:9px; cursor:pointer; }
+.search-result:hover { background:#f0faf5; }
+.search-result strong, .search-result small { display:block; }
+.search-result strong { font-size:11px; } .search-result small { color:var(--muted); font-size:10px; margin-top:3px; }
+.info-box, .route-message { border:1px solid #dfece8; border-radius:9px; background:#f6faf9; padding:10px; font-size:12px; line-height:1.6; overflow-wrap:anywhere; }
+.route-message { margin-bottom:4px; }
+.directions { max-height:190px; overflow-y:auto; padding-left:22px; margin:8px 0 0; }
+.directions:empty { display:none; }
+.directions li { font-size:11px; color:#455d6a; margin-bottom:7px; padding-bottom:6px; border-bottom:1px dashed #dce7ea; }
+/* [GV HỎI - YÊU CẦU 4] Tiêu đề chỉ đường theo từng chặng A→B, B→C. */
+.directions .direction-leg { list-style:none; margin:10px 0 8px -19px; padding:8px 10px; border:1px solid #b9dfd2; border-radius:8px; background:#eaf8f2; color:#0b7756; font-weight:850; font-size:12px; }
+.actions-panel { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.api-note { text-align:center; color:#8093a0; font-size:10px; margin:0 0 5px; }
+/* [GV HỎI] MÀU CÁC VỊ TRÍ A / B,C / ĐIỂM CUỐI: chỉ cần đổi background bên dưới. */
+.waypoint-icon { display:grid; place-items:center; width:32px; height:32px; border:3px solid #fff; border-radius:50%; box-shadow:0 3px 12px rgba(15,45,50,.3); color:#fff; font-size:12px; font-weight:900; }
+.waypoint-start { background:#238636; }
+.waypoint-middle { background:#0f6cbd; }
+.waypoint-end { background:#c73737; }
+/* [GV HỎI] Màu marker cửa hàng ở đây */
+.store-marker-icon { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:#fff; border:3px solid #fff; box-shadow:0 3px 12px rgba(10,44,50,.3); font-size:20px; user-select:none; }
+.store-highlight { color:#168044; font-weight:800; }
+.error-text { color:#b42e38; font-weight:800; }
+.loading-text { color:#9a690f; font-weight:750; }
+#map .leaflet-tile, .leaflet-container img.leaflet-tile { mix-blend-mode:normal !important; opacity:1; }
+#map .leaflet-popup-content-wrapper { border-radius:12px; box-shadow:0 8px 25px rgba(10,50,50,.17); }
+#map .leaflet-control-zoom a { color:#244b4a; }
+@media (max-width:1230px) {
+  .app-layout { grid-template-columns:250px minmax(320px,1fr) 280px; gap:9px; padding:9px; }
+  .panel { padding:11px; }
+  .tech-badges { display:none; }
+  .map-card-header { flex-wrap:wrap; }
+}
+@media (max-width:1000px) {
+  .app-layout { height:auto; min-height:0; grid-template-columns:minmax(230px,1fr) minmax(340px,1.5fr); }
+  .sidebar-left { grid-column:1; grid-row:1; overflow:visible; }
+  .map-card { grid-column:2; grid-row:1; min-height:680px; }
+  .sidebar-right { grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; overflow:visible; }
+  .api-note { grid-column:1/-1; }
+  #map { min-height:490px; }
+}
+@media (max-width:650px) {
+  .app-header { padding:14px; }
+  .brand-mark { width:42px; height:42px; flex-basis:42px; font-size:26px; }
+  .app-header h1 { font-size:17px; }
+  .subtitle { font-size:10px; }
+  .app-layout { display:flex; flex-direction:column; gap:10px; padding:10px; }
+  .sidebar-left { display:contents; }
+  .sidebar-left .store-search-panel { order:1; }
+  .sidebar-left .store-panel { order:3; }
+  .sidebar-left .store-detail-panel { order:4; }
+  .sidebar-left .quick-guide { order:7; }
+  .map-card { order:2; min-height:520px; }
+  .sidebar-right { order:5; display:flex; flex-direction:column; gap:10px; }
+  .sidebar-right > * { width:100%; }
+  .map-card-header { flex-direction:column; align-items:flex-start; }
+  .map-area { min-height:350px; }
+  #map { min-height:350px; }
+  .map-stat { flex-basis:85px; }
+  .map-bottom-bar { gap:8px; }
+  .map-clear { flex:1 1 100%; }
+  .store-panel .store-list { max-height:310px; overflow:auto; }
+}
+
+
+/* ==============================================================
+   VISUAL DESIGN V3 · NAVY / CYAN ROUTING DASHBOARD
+   Các lớp này chỉ thay đổi giao diện, giữ nguyên IDs và nghiệp vụ.
+   =============================================================== */
+:root{--header:#0c1d36;--header-deep:#071526;--primary:#067bc8;--primary-dark:#046aa8;--primary-soft:#e9f6ff;--blue:#087bdc;--blue-soft:#e9f3ff;--text:#152c47;--muted:#6c8098;--border:#d9e5f0;--bg:#eaf1f9;--shadow:0 8px 30px rgba(12,38,74,.07)}
+body{background:linear-gradient(135deg,#eaf2fa 0%,#f5f8fc 48%,#e8f1fb 100%);font-family:Inter,'Segoe UI',Arial,sans-serif}
+.app-header{min-height:106px;padding:18px 28px;background:radial-gradient(circle at 67% 25%,rgba(20,179,251,.16),transparent 42%),linear-gradient(105deg,#06172d,#10294c 75%,#07192e);border-bottom:3px solid #13b7f2;box-shadow:0 9px 28px rgba(5,28,60,.19)}
+.brand-mark{width:60px;height:60px;flex-basis:60px;border:1px solid rgba(97,213,255,.42);border-radius:19px;color:#91e8ff;background:linear-gradient(145deg,rgba(19,179,242,.22),rgba(9,62,106,.5));box-shadow:inset 0 0 25px rgba(18,175,241,.14),0 0 22px rgba(18,175,241,.12);font-size:39px}
+.brand-mark span{transform:rotate(-15deg)}
+.eyebrow{color:#71dafa;font-size:10px;letter-spacing:.2em}
+.app-header h1{font-size:clamp(19px,1.75vw,28px);letter-spacing:.045em;color:#fff}
+.heading-accent{color:#53ddff}
+.subtitle{color:#b4cbe5;font-size:12px}
+.tech-badges span{border-color:rgba(84,192,250,.36);background:rgba(12,63,107,.5);color:#d0efff;padding:8px 13px;letter-spacing:.05em}
+.tech-badges .status-chip{background:rgba(5,109,90,.22);color:#8cf4d0;border-color:rgba(83,229,180,.38)}
+.status-chip i,.pulse-dot{display:inline-block;width:8px;height:8px;background:#24e2a3;border-radius:50%;box-shadow:0 0 0 4px rgba(36,226,163,.14);margin-right:6px}
+.app-layout{height:calc(100vh - 106px);gap:14px;padding:14px;grid-template-columns:minmax(260px,305px) minmax(370px,1fr) minmax(290px,336px)}
+.sidebar{gap:13px}
+.panel,.map-card{border:1px solid #d8e4ef;border-radius:17px;box-shadow:0 5px 22px rgba(17,45,81,.065)}
+.panel{padding:16px}
+.panel-heading h2{color:#142f4c;font-size:14px}
+.panel-heading p{font-size:11px}
+.section-icon{background:#e3f3ff;color:#0277b8;border-radius:11px}
+.section-icon.blue{background:#e9f0ff;color:#2465c2}
+.store-search-panel{background:linear-gradient(145deg,#fff,#eff8ff)}
+.quick-guide{background:linear-gradient(135deg,#f3f8ff,#e8f2ff)}
+.store-card{border-top-color:#e9eff6;padding:13px 7px;border-radius:8px}
+.store-card:hover,.store-card.selected{background:#eaf6ff}
+.store-card.selected{box-shadow:inset 3px 0 #11a3ed}
+.store-card.nearest{background:#e6fbf3;box-shadow:inset 3px 0 #00ba83}
+.store-index{background:#e1f3ff;color:#067fbe}
+.store-content strong{color:#193551}
+.store-detail-content .detail-coordinate{background:#e8f5ff;color:#096ba9}
+.input-shell{border-color:#cfdfed;background:#fbfdff}
+.input-shell:focus-within{border-color:#10a6ea;box-shadow:0 0 0 3px rgba(32,174,242,.13)}
+.input-shell span{color:#0586c9}
+.map-card{border-color:#c9dced;box-shadow:0 14px 36px rgba(18,54,93,.12)}
+.map-card-header{background:#fff;min-height:89px;padding:15px 18px}
+.map-card-header h2{font-size:18px;color:#153656}
+.map-overline{color:#048bd3!important}
+.map-area{padding:0 10px;background:#e4eef9}
+#map{border:1px solid #b6d4e6;border-radius:12px;background:#dcebf2}
+.map-instruction{position:absolute;top:17px;left:64px;z-index:450;display:flex;gap:6px;align-items:center;pointer-events:none;background:rgba(6,26,47,.85);color:#dcf9ff;box-shadow:0 5px 18px rgba(2,25,42,.2);border:1px solid rgba(127,213,251,.5);padding:8px 11px;border-radius:9px;font-weight:800;letter-spacing:.07em;font-size:9px}
+.map-instruction .pulse-dot{width:6px;height:6px;flex-shrink:0}
+.map-legend span{background:rgba(255,255,255,.96);border-color:#d8e8f3}
+.map-bottom-bar{background:linear-gradient(#fff,#f8fbff);border-top:1px solid #dceaf3;min-height:78px}
+.stat-icon{background:#e5f6ff;color:#078ad2}
+.map-stat:nth-child(2) .stat-icon{background:#edf2ff}
+.map-stat strong{font-size:16px}
+.btn{border-radius:10px;padding:11px 12px}
+.btn.primary,.btn.active{background:linear-gradient(125deg,#0a97e1,#0664b8);border-color:#087ac9;box-shadow:0 3px 10px rgba(6,121,198,.14)}
+.btn.secondary{color:#125ca3;border-color:#c9def5;background:#f0f7ff}
+.btn:hover:not(:disabled){box-shadow:0 6px 17px rgba(22,111,183,.16)}
+.help{background:#edf8ff;border-left:3px solid #0c9ae0;color:#456986}
+.mode-button{min-height:83px}
+.mode-button.active small{color:#e0f5ff}
+.button-icon{background:#eaf5ff;color:#167fbd}
+.info-box,.route-message{background:#f5faff;border-color:#d9eafa}
+.directions .direction-leg{border-color:#b9def5;background:#e8f5ff;color:#1465a2}
+.api-note{color:#7790aa;letter-spacing:.07em;font-size:9px;line-height:1.8}
+.api-note span:last-child{letter-spacing:0;color:#8ca0b2}
+.footer-glow{color:#13cba8}
+.waypoint-start{background:#12a87b}.waypoint-middle{background:#1686dc}.waypoint-end{background:#ef6a3a}
+#map .leaflet-popup-content-wrapper{border-radius:14px}
+@media(max-width:1230px){.app-layout{grid-template-columns:250px minmax(320px,1fr) 280px;gap:10px;padding:10px}}
+@media(max-width:1000px){.app-layout{height:auto;grid-template-columns:minmax(230px,1fr) minmax(340px,1.5fr)}}
+@media(max-width:650px){.app-header{min-height:92px;padding:14px}.app-header h1{font-size:16px}.brand-mark{width:44px;height:44px;flex-basis:44px;font-size:28px}.app-layout{display:flex;gap:10px;padding:10px}.map-instruction{top:12px;left:55px;font-size:8px}.map-card-header h2{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.btn,.store-card{transition:none!important}}

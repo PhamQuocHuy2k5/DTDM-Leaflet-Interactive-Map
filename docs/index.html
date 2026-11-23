@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đề tài 3 - Tìm đường đi giữa hai địa điểm bằng Leaflet, OSRM và Nominatim.">
+    <title>Bản đồ cửa hàng & Tìm đường | Đề tài 3 Leaflet</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="leaflet/leaflet.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- [GV HỎI] GIAO DIỆN: Giữ nguyên toàn bộ id cũ để app.js chạy đủ 6 yêu cầu.
+         Bên trái = tìm và chọn cửa hàng; giữa = bản đồ; bên phải = điều khiển tuyến.
+         Chỉ đổi giao diện, không đổi dữ liệu 5 cửa hàng mẫu trong app.js. -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true"><span>◈</span></div>
+            <div>
+                <p class="eyebrow">ĐIỆN TOÁN ĐÁM MÂY &nbsp; / &nbsp; ĐỀ TÀI 03</p>
+                <h1>LEAFLET <span class="heading-accent">ROUTE EXPLORER</span></h1>
+                <p class="subtitle">Tìm đường đi giữa hai địa điểm · Bản đồ thông minh tại Cần Thơ</p>
+            </div>
+        </div>
+        <div class="tech-badges" aria-label="Công nghệ sử dụng">
+            <span class="status-chip"><i></i> DEMO READY</span><span>LEAFLET</span><span>OSRM API</span>
+        </div>
+    </header>
+
+    <main class="app-layout">
+        <!-- CỘT TRÁI: Danh sách cửa hàng có sẵn (yêu cầu 1) -->
+        <aside class="sidebar sidebar-left" aria-label="Tìm kiếm và danh sách cửa hàng">
+            <section class="panel store-search-panel">
+                <div class="panel-heading"><span class="section-icon">⌕</span><div><h2>Tìm kiếm cửa hàng</h2><p>Lọc các điểm bán hàng mẫu</p></div></div>
+                <label for="storeFilter">Tên hoặc địa chỉ cửa hàng</label>
+                <div class="input-shell"><span aria-hidden="true">⌕</span><input id="storeFilter" type="search" placeholder="Ví dụ: Ninh Kiều, Cái Răng..." autocomplete="off"></div>
+                <p class="input-caption">Lọc tức thì trong danh sách có sẵn, không cần gọi API.</p>
+            </section>
+            <section class="panel store-panel">
+                <div class="panel-heading"><span class="section-icon blue">▤</span><div><h2>Điểm bán hàng <span class="count-chip" id="storeCount">5</span></h2><p>Chọn một cửa hàng để xem trên bản đồ</p></div></div>
+                <!-- [GV HỎI] renderStores() ở app.js sinh danh sách từ const stores -->
+                <div id="storeList" class="store-list"></div>
+                <div id="storeEmpty" class="empty-result" hidden>Không có cửa hàng phù hợp.</div>
+            </section>
+            <section class="panel store-detail-panel" aria-live="polite">
+                <div class="panel-heading"><span class="section-icon">◎</span><div><h2>Cửa hàng đang xem</h2><p>Thông tin từ dữ liệu mẫu</p></div></div>
+                <div id="selectedStoreDetail" class="store-detail-content">Chọn một cửa hàng trong danh sách hoặc click marker trên bản đồ để xem thông tin.</div>
+            </section>
+            <section class="panel quick-guide">
+                <div class="panel-heading"><span class="section-icon blue">?</span><div><h2>Hướng dẫn nhanh</h2><p>Thao tác theo 6 yêu cầu đề tài</p></div></div>
+                <ol><li>Chọn cửa hàng mẫu để xem vị trí.</li><li>Click bản đồ để lấy tọa độ.</li><li>Chọn chế độ tìm cửa hàng gần nhất hoặc tuyến A → B.</li><li>Click thêm C, D để tạo điểm trung gian.</li><li>Nhập tọa độ hoặc tìm tên địa điểm bên phải.</li></ol>
+            </section>
+        </aside>
+
+        <!-- CỘT GIỮA: Leaflet map, không thay đổi id="map" -->
+        <section class="map-card" aria-label="Bản đồ tương tác">
+            <div class="map-card-header">
+                <div><p class="map-overline">BẢN ĐỒ TRỰC TUYẾN</p><h2>Khám phá khu vực Cần Thơ</h2><p>Click trực tiếp để chọn điểm xuất phát, điểm đến và điểm trung gian.</p></div>
+                <label class="map-source-label" for="baseMapSelect">Bản đồ nền
+                    <select id="baseMapSelect" aria-label="Chọn bản đồ nền"><option value="0">Esri World Topo Map</option><option value="1">Esri World Imagery (Vệ tinh)</option><option value="2">Esri World Street Map</option><option value="3">OpenStreetMap</option></select>
+                </label>
+            </div>
+            <div class="map-area">
+                <div class="map-instruction" aria-hidden="true"><span class="pulse-dot"></span><span>CHỌN VỊ TRÍ TRÊN BẢN ĐỒ</span></div>
+                <!-- [GV HỎI] Leaflet dựng vào div này; màu đường đổi ở drawRouteGeometry() trong app.js -->
+                <div id="map"></div>
+                <div class="map-legend" aria-label="Chú thích bản đồ"><span><i class="legend-store"></i>Cửa hàng</span><span><i class="legend-start"></i>Điểm A</span><span><i class="legend-middle"></i>Trung gian</span><span><i class="legend-end"></i>Điểm cuối</span></div>
+            </div>
+            <div class="map-bottom-bar" aria-label="Tóm tắt tuyến đường">
+                <div class="map-stat"><span class="stat-icon">↔</span><div><small>Quãng đường</small><strong id="routeDistance">--</strong></div></div>
+                <div class="map-stat"><span class="stat-icon">◷</span><div><small>Thời gian dự kiến</small><strong id="routeDuration">--</strong></div></div>
+                <div class="map-stat"><span class="stat-icon">●</span><div><small>Số điểm</small><strong id="waypointCount">0</strong></div></div>
+                <button id="clearRoute" class="btn danger map-clear" type="button">↺ Xóa tuyến</button>
+            </div>
+        </section>
+
+        <!-- CỘT PHẢI: giữ đầy đủ các chức năng 2,3,4,5,6 -->
+        <aside class="sidebar sidebar-right" aria-label="Điều khiển tìm đường">
+            <section class="panel modes-panel">
+                <div class="panel-heading"><span class="section-icon">↗</span><div><h2>Chế độ tìm đường</h2><p>Chọn một trong hai cách sử dụng</p></div></div>
+                <div class="mode-grid">
+                    <button id="modeNearest" class="btn mode-button active" type="button" aria-pressed="true"><span class="button-icon" aria-hidden="true">⌖</span><span><strong>Cửa hàng gần nhất</strong><small>Chọn 1 điểm trên bản đồ</small></span></button>
+                    <button id="modeRoute" class="btn mode-button" type="button" aria-pressed="false"><span class="button-icon" aria-hidden="true">↝</span><span><strong>Tuyến nhiều điểm</strong><small>A → B → C → D...</small></span></button>
+                </div>
+                <p class="help" id="modeHelp">Click một điểm trên bản đồ. Hệ thống sẽ tìm cửa hàng có quãng đường ngắn nhất và vẽ tuyến đến đó.</p>
+            </section>
+            <section class="panel input-panel">
+                <div class="panel-heading"><span class="section-icon blue">⌕</span><div><h2>Nhập tọa độ / địa điểm</h2><p>Gợi ý sẵn hoặc tìm theo tên</p></div></div>
+                <label for="placeInput">Tọa độ hoặc tên địa điểm</label>
+                <div class="input-shell"><span aria-hidden="true">⌖</span><input id="placeInput" type="text" list="localSuggestions" placeholder="10.0340, 105.7880" autocomplete="off"></div>
+                <datalist id="localSuggestions"></datalist>
+                <div class="button-row"><button id="addInputPoint" class="btn primary" type="button">+ Thêm điểm</button><button id="searchPlace" class="btn secondary" type="button">⌕ Tìm địa điểm</button></div>
+                <div id="searchResults" class="search-results" aria-live="polite"></div>
+            </section>
+            <section class="panel coordinate-panel">
+                <div class="panel-heading compact"><span class="section-icon">⌖</span><div><h2>Tọa độ vị trí</h2><p>Hiển thị sau khi click bản đồ</p></div></div>
+                <div id="coordinateInfo" class="info-box">Click bản đồ hoặc nhập tọa độ để bắt đầu.</div>
+            </section>
+            <section class="panel route-panel">
+                <div class="panel-heading compact"><span class="section-icon blue">≋</span><div><h2>Thông tin tuyến đường</h2><p>Khoảng cách, trạng thái và chỉ dẫn</p></div></div>
+                <div id="routeMessage" class="route-message" aria-live="polite">Chưa có tuyến đường.</div>
+                <ol id="directions" class="directions"></ol>
+            </section>
+            <section class="panel actions-panel"><button id="undoPoint" class="btn secondary" type="button" disabled>← Xóa điểm cuối</button><button id="resetRouteSide" class="btn outline-danger" type="button">↺ Làm lại</button></section>
+            <p class="api-note"><span class="footer-glow">●</span> LEAFLET · OSRM ROUTING API · OPENSTREETMAP<br><span>Project demo môn Điện toán đám mây</span></p>
+        </aside>
+    </main>
+
+    <!-- [GV HỎI] Leaflet local 2.0.0-alpha.1: dùng global build, không dùng leaflet.js dạng ES module -->
+    <script src="leaflet/leaflet-global.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+Giao diện 3 cột: cửa hàng | bản đồ | điều khiển.
+Giữ 5 cửa hàng mẫu.
+Chỉ đường từng chặng A→B, B→C...
+Màu giao diện tại css/style.css :root.
+Màu đường tại js/app.js drawRouteGeometry().
+Màu marker A/B/C tại css/style.css waypoint-start/middle/end.
+Xem NOTE_VI_TRI_CODE.txt.

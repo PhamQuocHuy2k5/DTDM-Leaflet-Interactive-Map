@@ -1,0 +1,28 @@
+ĐỐI CHIẾU 6 YÊU CẦU ĐỀ TÀI 3
+===========================
+1. HIỂN THỊ CỬA HÀNG: const stores, renderStores() – 5 cửa hàng mẫu.
+2. GẦN NHẤT: startNearestStoreRoute(), OSRM Table API; dự phòng Haversine.
+3. A→B: map.on(click), requestRoute(), OSRM Route API, Polyline.
+4. ĐIỂM TRUNG GIAN + CHỈ ĐƯỜNG: A→B→C→D, renderDirections() chia từng chặng và từng bước rẽ.
+5. CLICK TỌA ĐỘ: map.on(click), showCoordinate().
+6. NHẬP TỌA ĐỘ + GỢI Ý: parseCoordinateInput(), datalist; tìm tên bằng Nominatim.
+
+ĐÃ CẢI THIỆN:
+- Chống kết quả tìm gần nhất cũ ghi đè khi click nhiều lần nhanh.
+- Bỏ kết quả tìm tên đã hết hiệu lực sau khi reset.
+- Chỉ dẫn đường đi có tiêu đề từng chặng A→B, B→C...
+- Giữ nguyên dữ liệu 5 cửa hàng và ghi chú [GV HỎI].
+
+KIỂM TRA THỰC HIỆN:
+- node --check: cú pháp JavaScript hợp lệ.
+- Chromium tự động với API GIẢ LẬP: 5 cửa hàng, lọc, nearest, A-B-C-D,
+  chỉ đường, xóa điểm, reset, click tọa độ, gợi ý và tìm tên Nominatim.
+- Mô phỏng OSRM lỗi HTTP 503: dự phòng Haversine và đường nối thẳng,
+  có cảnh báo, không lỗi JavaScript.
+- Đã xem giao diện desktop và mobile bằng trình duyệt với tile giả lập.
+
+GIỚI HẠN:
+- Chưa kiểm tra được API OSRM/Nominatim và tile bản đồ THẬT do giới hạn mạng.
+- Cần chạy bằng Live Server với Internet và thử đủ 6 mục trên máy bạn.
+- OSRM mặc định tìm tuyến theo profile định tuyến, không cam kết chứng minh
+  tổng quãng đường tuyệt đối ngắn nhất trong mọi trường hợp.

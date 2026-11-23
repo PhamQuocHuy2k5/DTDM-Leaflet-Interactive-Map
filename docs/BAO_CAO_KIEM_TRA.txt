@@ -1,0 +1,49 @@
+BÁO CÁO KIỂM TRA PROJECT - ĐỀ TÀI 3 LEAFLET
+================================================
+
+1. ĐỐI CHIẾU 6 YÊU CẦU CỦA ĐỀ
+- Yêu cầu 1: Xây dựng bản đồ các điểm bán hàng có sẵn -> ĐẠT
+  Code chính: stores, renderStores().
+- Yêu cầu 2: Chọn 1 điểm, tìm cửa hàng gần nhất và vẽ đường -> ĐẠT
+  Code chính: startNearestStoreRoute(), findNearestStoreByRoad(), requestRoute().
+- Yêu cầu 3: Click 2 điểm để tìm đường -> ĐẠT
+  Code chính: map click, handleNewPoint(), requestRoute().
+- Yêu cầu 4: Thêm 1 hoặc nhiều điểm trung gian -> ĐẠT
+  Code chính: waypoints, rebuildWaypointMarkers(), requestRoute().
+- Yêu cầu 5: Click bản đồ và hiển thị tọa độ -> ĐẠT
+  Code chính: map.on("click"), showCoordinate().
+- Yêu cầu 6: Nhập tọa độ trực tiếp có gợi ý -> ĐẠT
+  Code chính: datalist, parseCoordinateInput(), buildLocalSuggestions().
+  Có thêm tìm tên địa điểm qua Nominatim khi người dùng chủ động bấm Tìm địa điểm.
+
+2. CÁC KIỂM TRA ĐÃ THỰC HIỆN
+- Kiểm tra cú pháp JavaScript bằng node --check: PASS.
+- Kiểm tra liên kết ID giữa HTML và JavaScript: PASS, không thiếu ID.
+- Kiểm tra đủ các file bắt buộc: PASS.
+- Kiểm tra logic tĩnh bằng DOM/Leaflet mock: PASS.
+- Kiểm tra luồng OSRM Table, OSRM Route và Nominatim bằng mock API: PASS.
+- Kiểm tra tài liệu Word bằng render 12 trang và xem toàn bộ trang: PASS.
+
+3. CÁC TỐI ƯU ĐÃ THÊM
+- Giao diện hiện đại, responsive, dễ demo.
+- Hai chế độ thao tác hiển thị rõ trạng thái đang chọn.
+- Marker A/B/C... phân biệt màu đầu, giữa, cuối.
+- Có danh sách cửa hàng và highlight cửa hàng gần nhất.
+- Có khoảng cách, thời gian, số điểm và chỉ đường.
+- Có nút xóa điểm cuối và làm lại.
+- Chống click nhầm ngoài phạm vi Việt Nam.
+- Giới hạn số waypoint để tránh API lỗi khi demo.
+- Có timeout và xử lý lỗi API rõ ràng.
+- OSRM lỗi thì có fallback khoảng cách địa lý/đường thẳng để giao diện không bị đứng.
+- Tile OSM lỗi có thể chuyển sang Esri.
+- Nominatim chỉ gọi khi người dùng chủ động tìm, không gọi liên tục theo mỗi phím gõ.
+
+4. LƯU Ý KHI DEMO
+- Nên chạy START_DEMO.bat hoặc mở index.html bằng Live Server.
+- Cần Internet cho bản đồ nền, OSRM và Nominatim.
+- Dịch vụ public bên ngoài có thể chậm hoặc tạm gián đoạn; code đã có xử lý fallback.
+- Trước khi demo nên bấm Xóa tuyến/làm lại.
+
+5. PHIÊN BẢN LEAFLET
+- Bộ Leaflet local: 2.0.0-alpha.1.
+- Dùng leaflet-global.js và API constructor mới như new L.LeafletMap(...), new L.Marker(...).

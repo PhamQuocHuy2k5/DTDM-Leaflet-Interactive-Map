@@ -1,0 +1,11 @@
+SỬA LỖI BẢN ĐỒ 403 - ACCESS BLOCKED
+
+NGUYÊN NHÂN: tile.openstreetmap.org có thể từ chối các yêu cầu tile (HTTP 403). Đây không phải lỗi thuật toán OSRM.
+
+ĐÃ SỬA: dùng CARTO Light trước, Esri tiếp theo, OpenStreetMap cuối cùng. Nếu nguồn đang dùng lỗi, ứng dụng tự thử nguồn khác. Có thể chọn nguồn ở ô “Bản đồ nền”.
+
+CÁCH CHẠY: Trong VS Code, mở thư mục project, nhấn chuột phải index.html -> Open with Live Server. URL nên bắt đầu bằng http://127.0.0.1:5500/ hoặc http://localhost:5500/, không phải file:///C:/...
+
+Nếu vẫn không có bản đồ: thử các nguồn trong menu, kiểm tra kết nối Internet, tắt tạm các extension chặn nội dung, và nhấn Ctrl+F5 để tải lại. Các nguồn bản đồ vẫn phụ thuộc mạng và chính sách máy chủ; không có cách bảo đảm 100% luôn tải được.
+
+Các giá trị khoảng cách/thời gian do OSRM API trả về không liên quan trực tiếp đến các tile bản đồ.
