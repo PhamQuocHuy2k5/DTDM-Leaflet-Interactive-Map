@@ -70,3 +70,30 @@ CAI_DAT_VAO_DTDM.bat: tiện ích copy project về thư mục DTDM đã cấu h
 4) Chế độ A -> B.
 5) Click thêm C, D.
 6) Nhập tọa độ và tìm tên địa điểm.
+
+
+
+<!-- PROJECT-OVERVIEW-START -->
+
+## Professional Project Overview
+
+### DTDM LEAFLET INTERACTIVE MAP
+
+DTDM LEAFLET is an interactive Web GIS application designed to support geographic information visualization and route planning.
+
+### Project Scope
+- Interactive geographic maps
+- Store and location visualization
+- Nearest-store search
+- Multi-waypoint route planning
+- Geographic coordinate lookup
+- Distance and travel-time calculation
+- Map layer management
+
+### Technology Stack
+HTML5, CSS3, JavaScript, Leaflet.js, OpenStreetMap, OSRM and Nominatim.
+
+### Project Value
+Demonstrates frontend development, geographic data processing, external API integration and Web GIS applications.
+
+<!-- PROJECT-OVERVIEW-END -->
